@@ -1,0 +1,1 @@
+{"net":{"http_server_properties":{"servers":[{"https://res.wx.qq.com":{"supports_spdy":true}},{"https://g.alicdn.com":{"supports_spdy":true}},{"https://vdn.apps.cntv.cn":{"supports_spdy":true}},{"https://dh5.cntv.myalicdn.com":{"supports_spdy":true}},{"https://p.data.cctv.com":{"supports_spdy":true}},{"https://cy-cdn.kuaizhan.com":{"supports_spdy":true}}],"version":5}}}
