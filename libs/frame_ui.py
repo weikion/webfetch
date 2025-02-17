@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ###########################################################################
-## Python code generated with wxFormBuilder (version Oct 26 2018)
+## Python code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 ## http://www.wxformbuilder.org/
 ##
 ## PLEASE DO *NOT* EDIT THIS FILE!
@@ -77,12 +77,12 @@ class FrameUI ( wx.Frame ):
 		self.res_info.SetColSize( 4, 90 )
 		self.res_info.EnableDragColMove( False )
 		self.res_info.EnableDragColSize( False )
-		self.res_info.SetColLabelSize( 30 )
 		self.res_info.SetColLabelValue( 0, u"编号" )
 		self.res_info.SetColLabelValue( 1, u"网址" )
 		self.res_info.SetColLabelValue( 2, u"标题" )
 		self.res_info.SetColLabelValue( 3, u"来源" )
 		self.res_info.SetColLabelValue( 4, u"状态" )
+		self.res_info.SetColLabelSize( 30 )
 		self.res_info.SetColLabelAlignment( wx.ALIGN_CENTER, wx.ALIGN_CENTER )
 
 		# Rows
@@ -133,10 +133,6 @@ class FrameUI ( wx.Frame ):
 
 		bSizer71.Add( self.push_db_btn, 0, wx.ALL, 5 )
 
-		channelChoices = []
-		self.channel = wx.ComboBox( self.btn_panel, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( -1,36 ), channelChoices, wx.CB_READONLY )
-		bSizer71.Add( self.channel, 0, wx.ALIGN_CENTER_VERTICAL, 5 )
-
 
 		bSizer4.Add( bSizer71, 1, wx.EXPAND, 5 )
 
@@ -151,7 +147,7 @@ class FrameUI ( wx.Frame ):
 		self.Layout()
 		self.m_statusBar1 = self.CreateStatusBar( 3, 0, wx.ID_ANY )
 		self.m_timer1 = wx.Timer()
-		self.m_timer1.SetOwner( self, wx.ID_ANY )
+		self.m_timer1.SetOwner( self, self.m_timer1.GetId() )
 
 		self.Centre( wx.BOTH )
 
@@ -161,13 +157,13 @@ class FrameUI ( wx.Frame ):
 		self.start_btn.Bind( wx.EVT_BUTTON, self.start )
 		self.reset_btn.Bind( wx.EVT_BUTTON, self.reset )
 		self.push_db_btn.Bind( wx.EVT_BUTTON, self.push_db )
-		self.Bind( wx.EVT_TIMER, self.timer_func, id=wx.ID_ANY )
+		self.Bind( wx.EVT_TIMER, self.timer_func, id=self.m_timer1.GetId() )
 
 	def __del__( self ):
 		pass
 
 
-	# Virtual event handlers, overide them in your derived class
+	# Virtual event handlers, override them in your derived class
 	def quit( self, event ):
 		event.Skip()
 

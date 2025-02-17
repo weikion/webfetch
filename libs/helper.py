@@ -1,5 +1,10 @@
+import json
+import os
 import re
 from w3lib import html
+
+from libs.AES import decrypt
+
 
 async def keep_html_tags(html_str):
     # 先去掉script 标签所有内容
@@ -22,6 +27,18 @@ async def keep_html_tags(html_str):
 
     return res
 
+def read_json(name, aes_key = None):
+    content = {}
+    if os.path.exists(name + '.json'):
+        f = open(name + '.json', mode='r', encoding='utf-8')
+        json_content = f.read()
+        if json_content:
+            if aes_key is not None:
+                json_content = decrypt(aes_key, json_content)
+            content = json.loads(json_content)
+        f.close()
+
+    return content
 
 # html = '''
 # <html>

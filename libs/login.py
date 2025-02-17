@@ -11,6 +11,8 @@ import uuid
 from io import BytesIO
 from libs.login_ui import LoginUI
 from multiprocessing import Process
+from libs.AES import encrypt, decrypt
+from libs.helper import read_json
 
 
 class LoginFrame(LoginUI):
@@ -26,14 +28,12 @@ class LoginFrame(LoginUI):
         self.login_status = login_status
         self.login_username = login_username
 
-        if os.path.exists('login.json'):
-            f = open('login.json', mode='r', encoding='utf-8')
-            content = f.read()
-            if content:
-                login_info = json.loads(content)
-                self.username.SetValue(login_info['username'])
-                self.password.SetValue(login_info['password'])
-            f.close()
+        config = read_json('config')
+        aes_key = config['aes_key']
+
+        login_info = read_json('login', aes_key)
+        self.username.SetValue(login_info['username'])
+        self.password.SetValue(login_info['password'])
 
     def account_login(self, event):
         self.login_mode_1.Show()
@@ -44,7 +44,6 @@ class LoginFrame(LoginUI):
     def login(self, event):
         # ====================认证开始====================
         # 登录
-        aes_key = 'xxxxxxxxxxxx'
         bet_name = self.about['name']
         version = self.about['version']
 
@@ -60,10 +59,14 @@ class LoginFrame(LoginUI):
         username = self.username.GetValue()
         password = self.password.GetValue()
 
+        config = read_json('config')
+        login_url = config['login_url']
+        aes_key = config['aes_key']
+
         json_data = {}
         try:
             t = int(time.time())
-            url = 'http://xxxxxxxx?username=%s&password=%s&t=%d' % (username, password, t)
+            url = login_url + '?username=%s&password=%s&t=%d' % (username, password, t)
             res_byte = self.request.get(url)
             json_data = res_byte.json()
             # print(json_data)
@@ -71,7 +74,7 @@ class LoginFrame(LoginUI):
                 json_data['error'] = 0
             else:
                 json_data['error'] = 3
-            json_data['expires'] = '2025-1-1'
+            json_data['expires'] = '2028-1-1'
         except Exception:
             json_data['error'] = 99
 
@@ -94,7 +97,7 @@ class LoginFrame(LoginUI):
         else:
             if self.remember.IsChecked():
                 f = open('login.json', mode='w', encoding='utf-8')
-                f.write(json.dumps({'username': username, 'password': password}))
+                f.write(encrypt(aes_key, json.dumps({'username': username, 'password': password})))
                 f.flush()  # 刷新. 养成好习惯
                 f.close()
             else:
@@ -117,7 +120,7 @@ class LoginFrame(LoginUI):
         # print(self.login_status.value, self.login_username)
         if self.login_status.value == 1:
             version = self.about['version']
-            main_win = self.callback(None, self.login_username['name'], '2025-1-1')
+            main_win = self.callback(None, self.login_username['name'], '2028-1-1')
             main_win.SetTitle(main_win.GetTitle() + '-' + version)
 
             # 显示主窗口

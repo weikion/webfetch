@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ###########################################################################
-## Python code generated with wxFormBuilder (version Oct 26 2018)
+## Python code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 ## http://www.wxformbuilder.org/
 ##
 ## PLEASE DO *NOT* EDIT THIS FILE!
@@ -81,7 +81,7 @@ class LoginUI ( wx.Dialog ):
 
 		bSizer5 = wx.BoxSizer( wx.VERTICAL )
 
-		self.m_staticText3 = wx.StaticText( self.login_mode_1, wx.ID_ANY, u"copyright @ 2024  南国早报新媒体中心", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText3 = wx.StaticText( self.login_mode_1, wx.ID_ANY, u"copyright @ 2025  XXX", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText3.Wrap( -1 )
 
 		bSizer5.Add( self.m_staticText3, 0, wx.ALL, 5 )
@@ -108,7 +108,7 @@ class LoginUI ( wx.Dialog ):
 		self.m_qrcode = wx.StaticBitmap( self.login_mode_2, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.Size( 200,200 ), 0 )
 		bSizer8.Add( self.m_qrcode, 0, wx.ALIGN_CENTER|wx.ALL, 5 )
 
-		self.m_staticText6 = wx.StaticText( self.login_mode_2, wx.ID_ANY, u"copyright @ 2023  南国早报", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText6 = wx.StaticText( self.login_mode_2, wx.ID_ANY, u"copyright @ 2025  XXX", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText6.Wrap( -1 )
 
 		bSizer8.Add( self.m_staticText6, 0, wx.ALIGN_CENTER|wx.ALL, 5 )
@@ -123,7 +123,7 @@ class LoginUI ( wx.Dialog ):
 		self.SetSizer( bSizer1 )
 		self.Layout()
 		self.m_timer1 = wx.Timer()
-		self.m_timer1.SetOwner( self, wx.ID_ANY )
+		self.m_timer1.SetOwner( self, self.m_timer1.GetId() )
 
 		self.Centre( wx.BOTH )
 
@@ -132,13 +132,13 @@ class LoginUI ( wx.Dialog ):
 		self.qrcode_login_btn.Bind( wx.EVT_LEFT_UP, self.qrcode_login )
 		self.login_btn.Bind( wx.EVT_BUTTON, self.login )
 		self.account_login_btn.Bind( wx.EVT_LEFT_UP, self.account_login )
-		self.Bind( wx.EVT_TIMER, self.timer_func, id=wx.ID_ANY )
+		self.Bind( wx.EVT_TIMER, self.timer_func, id=self.m_timer1.GetId() )
 
 	def __del__( self ):
 		pass
 
 
-	# Virtual event handlers, overide them in your derived class
+	# Virtual event handlers, override them in your derived class
 	def close( self, event ):
 		event.Skip()
 

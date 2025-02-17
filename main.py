@@ -1,6 +1,6 @@
 ###########################################################################
 ## 指定网址内容抓取
-## https://www.ngzb.com.cn/
+## https://www.sindow.net/
 ## author：weiziqian
 ## contact：43188540
 ###########################################################################
@@ -29,7 +29,7 @@ from pyppeteer import launch
 from urllib.parse import urlparse
 from libs.login import LoginFrame
 from libs.frame import MainFrame
-from libs.helper import keep_html_tags
+from libs.helper import keep_html_tags, read_json
 import multiprocessing as mp
 from multiprocessing import Value, Manager, Process
 
@@ -528,9 +528,11 @@ class Main(MainFrame):
     # 加入稿库
     def push_db(self, event):
         try:
+            config = read_json('config')
+            gaoku_url = config['gaoku_url']
+
             self.push_db_btn.Disable()
             for i in range(len(res_data['data'])):
-                url = self.api_url.GetValue()
                 data = {
                     'src_url': res_data['data'][i][1],  # 来源网址
                     'title': res_data['data'][i][2],
@@ -538,7 +540,7 @@ class Main(MainFrame):
                     'media_name': res_data['data'][i][3],
                 }
                 # print(data)
-                res_byte = session.post(url, data=data)
+                res_byte = session.post(gaoku_url, data=data)
                 json_data = res_byte.json()
                 # print(json_data)
 
