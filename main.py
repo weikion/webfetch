@@ -42,7 +42,7 @@ chromium_dir = os.path.join(current_dir, "chrome-win32/chrome.exe")
 
 # 版本信息
 about = {
-    'name': 'ngzb_fetch',
+    'name': 'webfetch',
     'version': 'beta1.2.1'
 }
 
@@ -439,30 +439,6 @@ class Main(MainFrame):
     def __init__(self, parent, username, expires):
         MainFrame.__init__(self, parent, username, expires)
 
-        # 获取频道列表
-        self.channel_name_list = ['请选择频道']
-        self.channel_id_list = ['']
-
-        url = 'http://app-api.ngzb.com.cn/v2/channel/chanelListForPHP'
-        headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-            'Accept': 'application/json'
-        }
-        res_byte = requests.get(url, headers=headers)
-        json_data = res_byte.json()
-        # print(json_data)
-        if 'channel_list' in json_data['data']:
-            channels = json_data['data']['channel_list']
-            # print(channels)
-            for channel in channels:
-                if channel['id'] == '0':
-                    continue
-                self.channel_id_list.append(channel['id'])
-                self.channel_name_list.append(channel['app_channel_name'])
-
-            self.channel.AppendItems(self.channel_name_list)
-            self.channel.SetSelection(0)
-
         # 线程列表
         self.processes = []
 
@@ -551,50 +527,42 @@ class Main(MainFrame):
 
     # 加入稿库
     def push_db(self, event):
-        index = self.channel.GetSelection()  # 获取选项索引
-        channel_id = self.channel_id_list[index]  # 获取对应的值
-        if channel_id == '':
-            box = wx.MessageDialog(None, '请选择频道', u'提示', wx.OK)
-            box.ShowModal()
-            box.Destroy()
-        else:
+        try:
+            self.push_db_btn.Disable()
+            for i in range(len(res_data['data'])):
+                url = self.api_url.GetValue()
+                data = {
+                    'src_url': res_data['data'][i][1],  # 来源网址
+                    'title': res_data['data'][i][2],
+                    'content': res_data['data'][i][6],
+                    'media_name': res_data['data'][i][3],
+                }
+                # print(data)
+                res_byte = session.post(url, data=data)
+                json_data = res_byte.json()
+                # print(json_data)
 
-            try:
-                self.push_db_btn.Disable()
-                for i in range(len(res_data['data'])):
-                    url = 'http://n-app-admin.ngzb.com.cn/appChannelNews/addNewsFromSpider2'
-                    data = {
-                        'src_url': res_data['data'][i][1],  # 来源网址
-                        'title': res_data['data'][i][2],
-                        'content': res_data['data'][i][6],
-                        'media_name': res_data['data'][i][3],
-                        'channel_id': channel_id,
-                    }
-                    # print(data)
-                    res_byte = session.post(url, data=data)
-                    json_data = res_byte.json()
-                    # print(json_data)
+            self.set_panel.Enable()
+            self.start_btn.Disable()
+            self.m_timer1.Stop()
 
-                self.set_panel.Enable()
-                self.start_btn.Disable()
-                self.m_timer1.Stop()
+            # 重置底色
+            for i in range(len(res_data['data'])):
+                self.res_info.SetCellBackgroundColour(i, 4, wx.WHITE)
 
-                # 重置底色
-                for i in range(len(res_data['data'])):
-                    self.res_info.SetCellBackgroundColour(i, 4, wx.WHITE)
+            del res_data['data'][:]  # 清空列表
+            res_data['complete'] = 0  # 重置状态
+            res_data['complete_count'] = 0  # 重置状态
+            self.res_info.ClearGrid()
 
-                del res_data['data'][:]  # 清空列表
-                res_data['complete'] = 0  # 重置状态
-                res_data['complete_count'] = 0  # 重置状态
-                self.res_info.ClearGrid()
+            msg = '加入稿库成功！'
+        except Exception:
+            msg = '网络出错，请重试'
 
-                msg = '加入稿库成功！'
-            except Exception:
-                msg = '网络出错，请重试'
+        box = wx.MessageDialog(None, msg, u'提示', wx.OK)
+        box.ShowModal()
+        box.Destroy()
 
-            box = wx.MessageDialog(None, msg, u'提示', wx.OK)
-            box.ShowModal()
-            box.Destroy()
 
     # 重置
     def reset(self, event):
