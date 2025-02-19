@@ -1,7 +1,7 @@
 # webfetch
 带UI界面的网站抓取工具，支持登录验证和推送到指定稿库的功能。
 
-
+![](https://doc.ngzb.com.cn/server/index.php?s=/api/attachment/visitFile&sign=ff8bd57f233a1f09df1a72f48ceb1b0a)
 
 ## 使用说明
 
@@ -13,7 +13,7 @@ git clone https://github.com/weikion/webfetch.git
 
 **2、 安装**
 
-下载源代码，再PyCharm中运行即可。
+下载源代码，在PyCharm中运行即可。
 
 **3、 配置文件**
 
@@ -29,7 +29,7 @@ git clone https://github.com/weikion/webfetch.git
 
 **4、 登录配置**
 
-默认是要登录验证的才能使用的，如果不需要登录，配置文件里的登录地址留空即可。
+默认是不要登录验证的就能使用的，如果需要登录，在配置文件里的输入登录验证地址。
 
 登录时将会POST发送账户和密码到配置的登录验证地址，字段为：
 
