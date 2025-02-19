@@ -14,6 +14,28 @@ from multiprocessing import Process
 from libs.AES import encrypt, decrypt
 from libs.helper import read_json
 
+def qrcode_task(session, session_id, status, username):
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(request_qrcode(session, session_id, status, username))
+    loop.close()
+
+
+async def request_qrcode(session, session_id, status, username):
+    host = 'ws://xxxxxxx/%s' % session_id
+    # host = "ws://localhost:9999"
+    # print(host)
+    async with websockets.connect(host) as websocket:
+        recv_text = await websocket.recv()
+        # print(f"{recv_text}")
+        login_info = json.loads(recv_text)
+        if login_info['code'] == 0:
+            res_byte = session.post('xxxxxx', {"token": login_info['token']})
+            json_data = res_byte.json()
+            # print(json_data)
+            if json_data['code'] == 1:
+                username['name'] = json_data['data']['manager']['name']
+                status.value = 1
+
 
 class LoginFrame(LoginUI):
     def __init__(self, parent, complete_callback, about, session, login_status, login_username):
@@ -64,19 +86,21 @@ class LoginFrame(LoginUI):
         aes_key = config['aes_key']
 
         json_data = {}
-        try:
-            t = int(time.time())
-            url = login_url + '?username=%s&password=%s&t=%d' % (username, password, t)
-            res_byte = self.request.get(url)
-            json_data = res_byte.json()
-            # print(json_data)
-            if json_data['code'] == 1:
-                json_data['error'] = 0
-            else:
-                json_data['error'] = 3
-            json_data['expires'] = '2028-1-1'
-        except Exception:
-            json_data['error'] = 99
+        json_data['error'] = 0
+        json_data['expires'] = '2028-1-1'
+        # try:
+        #     t = int(time.time())
+        #     url = login_url + '?username=%s&password=%s&t=%d' % (username, password, t)
+        #     res_byte = self.request.get(url)
+        #     json_data = res_byte.json()
+        #     # print(json_data)
+        #     if json_data['code'] == 1:
+        #         json_data['error'] = 0
+        #     else:
+        #         json_data['error'] = 3
+        #     json_data['expires'] = '2028-1-1'
+        # except Exception:
+        #     json_data['error'] = 99
 
         if json_data['error'] != 0:
             msg = '未知错误！'
@@ -111,6 +135,27 @@ class LoginFrame(LoginUI):
             main_win.Show()  # 显示主窗口
             self.Destroy()
         # ====================认证结束====================
+
+    def qrcode_login(self, event):
+        pass
+        # if not self.session_id:
+        #     response = self.request.get("xxxxxx")
+        #     session_id = response.cookies.get('JSESSIONID')
+        #     image = wx.Image(BytesIO(response.content))
+        #     bitmap = image.ConvertToBitmap()
+        #     self.m_qrcode.SetBitmap(bitmap)
+        #     self.session_id = session_id
+        #
+        # self.m_timer1.Start(1000)
+        #
+        # self.login_mode_1.Hide()
+        # self.login_mode_2.Show()
+        #
+        # # 打开socket
+        # self.qr_mp = Process(target=qrcode_task,
+        #                      args=(self.request, self.session_id, self.login_status, self.login_username,))
+        # self.qr_mp.daemon = True
+        # self.qr_mp.start()
 
     def close(self, event):
         self.Destroy()

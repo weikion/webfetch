@@ -26,7 +26,7 @@ class LoginUI ( wx.Dialog ):
 		self.login_mode_1 = wx.Panel( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		bSizer6 = wx.BoxSizer( wx.VERTICAL )
 
-		self.qrcode_login_btn = wx.StaticBitmap( self.login_mode_1, wx.ID_ANY, wx.Bitmap( u"qrcode.png", wx.BITMAP_TYPE_ANY ), wx.DefaultPosition, wx.Size( 400,50 ), 0 )
+		self.qrcode_login_btn = wx.StaticBitmap( self.login_mode_1, wx.ID_ANY, wx.Bitmap( u"banner.png", wx.BITMAP_TYPE_ANY ), wx.DefaultPosition, wx.Size( 400,50 ), 0 )
 		self.qrcode_login_btn.SetToolTip( u"二维码登录" )
 
 		bSizer6.Add( self.qrcode_login_btn, 0, wx.ALIGN_CENTER|wx.ALL, 5 )
