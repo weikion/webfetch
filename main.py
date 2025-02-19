@@ -527,39 +527,41 @@ class Main(MainFrame):
 
     # 加入稿库
     def push_db(self, event):
-        try:
-            config = read_json('config')
-            gaoku_url = config['gaoku_url']
+        config = read_json('config')
+        gaoku_url = config['gaoku_url']
+        if gaoku_url.strip() == "":
+            msg = '未配置稿库接口地址'
+        else:
+            try:
+                self.push_db_btn.Disable()
+                for i in range(len(res_data['data'])):
+                    data = {
+                        'src_url': res_data['data'][i][1],  # 来源网址
+                        'title': res_data['data'][i][2],
+                        'content': res_data['data'][i][6],
+                        'media_name': res_data['data'][i][3],
+                    }
+                    # print(data)
+                    res_byte = session.post(gaoku_url, data=data)
+                    json_data = res_byte.json()
+                    # print(json_data)
 
-            self.push_db_btn.Disable()
-            for i in range(len(res_data['data'])):
-                data = {
-                    'src_url': res_data['data'][i][1],  # 来源网址
-                    'title': res_data['data'][i][2],
-                    'content': res_data['data'][i][6],
-                    'media_name': res_data['data'][i][3],
-                }
-                # print(data)
-                res_byte = session.post(gaoku_url, data=data)
-                json_data = res_byte.json()
-                # print(json_data)
+                self.set_panel.Enable()
+                self.start_btn.Disable()
+                self.m_timer1.Stop()
 
-            self.set_panel.Enable()
-            self.start_btn.Disable()
-            self.m_timer1.Stop()
+                # 重置底色
+                for i in range(len(res_data['data'])):
+                    self.res_info.SetCellBackgroundColour(i, 4, wx.WHITE)
 
-            # 重置底色
-            for i in range(len(res_data['data'])):
-                self.res_info.SetCellBackgroundColour(i, 4, wx.WHITE)
+                del res_data['data'][:]  # 清空列表
+                res_data['complete'] = 0  # 重置状态
+                res_data['complete_count'] = 0  # 重置状态
+                self.res_info.ClearGrid()
 
-            del res_data['data'][:]  # 清空列表
-            res_data['complete'] = 0  # 重置状态
-            res_data['complete_count'] = 0  # 重置状态
-            self.res_info.ClearGrid()
-
-            msg = '加入稿库成功！'
-        except Exception:
-            msg = '网络出错，请重试'
+                msg = '加入稿库成功！'
+            except Exception:
+                msg = '网络出错，请重试'
 
         box = wx.MessageDialog(None, msg, u'提示', wx.OK)
         box.ShowModal()
@@ -620,6 +622,15 @@ if __name__ == "__main__":
 
     # 开始进程
     app = wx.App()
-    login_win = LoginFrame(None, Main, about, session, login_status, login_username)
-    login_win.Show()
+    config = read_json('config')
+    login_url = config['login_url']
+
+    if login_url.strip() == "":
+        main_win = Main(None, '', '')
+        main_win.SetTitle(main_win.GetTitle() + '-' + about['version'])
+        main_win.Show()  # 显示主窗口
+    else:
+        login_win = LoginFrame(None, Main, about, session, login_status, login_username)
+        login_win.Show()
+
     app.MainLoop()

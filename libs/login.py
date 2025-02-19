@@ -14,6 +14,7 @@ from multiprocessing import Process
 from libs.AES import encrypt, decrypt
 from libs.helper import read_json
 
+
 def qrcode_task(session, session_id, status, username):
     loop = asyncio.get_event_loop()
     loop.run_until_complete(request_qrcode(session, session_id, status, username))
@@ -54,8 +55,9 @@ class LoginFrame(LoginUI):
         aes_key = config['aes_key']
 
         login_info = read_json('login', aes_key)
-        self.username.SetValue(login_info['username'])
-        self.password.SetValue(login_info['password'])
+        if login_info:
+            self.username.SetValue(login_info['username'])
+            self.password.SetValue(login_info['password'])
 
     def account_login(self, event):
         self.login_mode_1.Show()
@@ -85,22 +87,18 @@ class LoginFrame(LoginUI):
         login_url = config['login_url']
         aes_key = config['aes_key']
 
-        json_data = {}
-        json_data['error'] = 0
-        json_data['expires'] = '2028-1-1'
-        # try:
-        #     t = int(time.time())
-        #     url = login_url + '?username=%s&password=%s&t=%d' % (username, password, t)
-        #     res_byte = self.request.get(url)
-        #     json_data = res_byte.json()
-        #     # print(json_data)
-        #     if json_data['code'] == 1:
-        #         json_data['error'] = 0
-        #     else:
-        #         json_data['error'] = 3
-        #     json_data['expires'] = '2028-1-1'
-        # except Exception:
-        #     json_data['error'] = 99
+        try:
+            t = int(time.time())
+            res_byte = self.request.post(login_url, {'username': username, 'password': password, 't': t})
+            json_data = res_byte.json()
+            # print(json_data)
+            if json_data['code'] == 1:
+                json_data['error'] = 0
+            else:
+                json_data['error'] = 3
+            json_data['expires'] = '2028-1-1'
+        except Exception:
+            json_data['error'] = 99
 
         if json_data['error'] != 0:
             msg = '未知错误！'
