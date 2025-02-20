@@ -1,5 +1,5 @@
 # webfetch
-带UI界面的网站抓取工具，支持登录验证和推送到指定稿库的功能。
+带UI界面的网站转稿工具，支持登录验证和推送到指定稿库的功能。
 
 ![](https://doc.ngzb.com.cn/server/index.php?s=/api/attachment/visitFile&sign=ff8bd57f233a1f09df1a72f48ceb1b0a)
 
@@ -66,7 +66,7 @@ git clone https://github.com/weikion/webfetch.git
 }
 ```
 
-**6、 仅支持抓取的网站** 
+**6、 支持被转稿的网站** 
 
 - 新华网
 - 南方网
@@ -80,10 +80,14 @@ git clone https://github.com/weikion/webfetch.git
 ## 未来开发计划
 
 - 登录验证使用加密模式传输，避免被拦截窃取。
-- 使用远程模板维护方式，可支持在线更新抓取的网站模板，更高效，快捷。
+- 使用远程模板维护方式，可支持在线更新转稿的网站模板，更高效，快捷。
 
 ## 联系
 
 微信：weikion
 
 qq：43188540
+
+## 免责声明
+
+工具只供合法使用，如果使用过程产生的一切法律责任，跟本人无关。

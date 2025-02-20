@@ -1,5 +1,5 @@
 ###########################################################################
-## 指定网址内容抓取
+## 指定网址内容转稿
 ## https://www.sindow.net/
 ## author：weiziqian
 ## contact：43188540
@@ -494,7 +494,7 @@ class Main(MainFrame):
 
             self.m_timer1.Start(1000)
         else:
-            box = wx.MessageDialog(None, '请输入抓取的网址', u'提示', wx.OK)
+            box = wx.MessageDialog(None, '请输入转稿的网址', u'提示', wx.OK)
             box.ShowModal()
             box.Destroy()
 

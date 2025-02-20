@@ -53,7 +53,7 @@
       <property name="size">900,600</property>
       <property name="style">wxCAPTION|wxCLOSE_BOX|wxMINIMIZE_BOX</property>
       <property name="subclass"></property>
-      <property name="title">桂花抓取工具</property>
+      <property name="title">桂花转稿工具</property>
       <property name="tooltip"></property>
       <property name="two_step_creation">0</property>
       <property name="window_extra_style"></property>
@@ -169,7 +169,7 @@
                       <property name="gripper">0</property>
                       <property name="hidden">0</property>
                       <property name="id">wxID_ANY</property>
-                      <property name="label">抓取的网址&#x0A;（一行一个&#x0A;最多10个）</property>
+                      <property name="label">转稿的网址&#x0A;（一行一个&#x0A;最多10个）</property>
                       <property name="markup">0</property>
                       <property name="max_size"></property>
                       <property name="maximize_button">0</property>
